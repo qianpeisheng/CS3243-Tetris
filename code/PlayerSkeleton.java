@@ -1,8 +1,11 @@
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -119,9 +122,14 @@ public class PlayerSkeleton {
 		//new TFrame(s);
 		PlayerSkeleton p = new PlayerSkeleton();
 		p.currentNodeValue = 0;
-		PrintWriter writer;
+		
 		try {
-			writer = new PrintWriter("Log" + LocalDateTime.now() + ".txt", "UTF-8");
+	        LocalDateTime now = LocalDateTime.now();
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
+	        String formatDateTime = now.format(formatter);
+			PrintWriter writer;
+
+			writer = new PrintWriter("Log-" + formatDateTime + ".txt", "UTF-8");
 			writer.println("training log starts\n");
 
 
@@ -243,7 +251,6 @@ public class PlayerSkeleton {
 			} else {
 				//there is a better neighbour
 				//set current to this neighbour, and continue the loop
-				//System.out.println("neighbour "+ bestNeighbour + " scores "+new DecimalFormat("##.##").format(neighboursScore[bestNeighbour]));
 				System.out.println(bestNeighbour +" is better ");
 				writer.println(bestNeighbour +" is better ");
 				p.updateWeights(bestNeighbour);
