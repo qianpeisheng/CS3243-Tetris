@@ -6,9 +6,9 @@ import java.util.concurrent.ThreadLocalRandom;
 public class PlayerSkeleton {
 	
 	public static int numberOfWeights = 7;
-	public static double[] weights = {-0.5, -0.5, 0.5,-0.5,-0.5, -0.5,-0.5};// = new float[numberOfWeights];
+	public static double[] weights = {-0.2, -0.1, 0.1,-0.5,-1, -0.3,-0.3};// = new float[numberOfWeights];
 
-	public static double[] lastWeights = {-0.5, -0.5, 0.5,-0.5,-0.5, -0.5,-0.5};// = new float[numberOfWeights];
+	public static double[] lastWeights = {-0.2, -0.1, 0.1,-0.5,-1, -0.3,-0.3};// = new float[numberOfWeights];
 
 	//public static double[] weights = {-0.1242, -0.0307, 0.298,-0.4959,-1, -0.3232,-0.3178};// = new float[numberOfWeights];
 	//public static double[] lastWeights = {-0.1242, -0.0307, 0.298,-0.4959,-1, -0.3232,-0.3178};// = new float[numberOfWeights];
@@ -18,7 +18,7 @@ public class PlayerSkeleton {
 
 	public static int currentRowClearedSum = 0;
 	public static double currentScore = 0;
-	public static int round = 100;
+	public static int round = 20;
 	public static int sleepTime = 0;
 
 	//int[] features = {colDiffSum, topHeight, numberOfRowsCleared, hasLost, numberOfHoles,meanHeightDiff,sumOfPitDepth};
@@ -214,7 +214,7 @@ public class PlayerSkeleton {
 			} else {
 				//there is a better neighbour
 				//set current to this neighbour, and continue the loop
-				System.out.println("neighbour "+ bestNeighbour + " scores "+new DecimalFormat("##.##").format(neighboursScore[bestNeighbour]));
+				//System.out.println("neighbour "+ bestNeighbour + " scores "+new DecimalFormat("##.##").format(neighboursScore[bestNeighbour]));
 				System.out.println(bestNeighbour +" is better ");
 				p.updateWeights(bestNeighbour);
 				p.updateLastweights();// new one is better than last, so replace it
