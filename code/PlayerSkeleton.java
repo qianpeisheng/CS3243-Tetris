@@ -33,12 +33,12 @@ public class PlayerSkeleton {
 	public static int currentRowClearedSum = 0;
 	public static double currentScore = 0;
 	
-	public static int simulationRound = 10;
-	public static int maximumRandomStarts = 10;
+	public static int simulationRound = 20;
+	public static int maximumRandomStarts = 100;
 	public static double learning_rate = 0.01;
 	public static double learning_rate_multiplier = 0.1;
-	public static double terminate_learning_rate = 0.001;
-	public static double percentageOfNeiboursToVisit = 0.5;
+	public static double terminate_learning_rate = 0.0001;
+	public static double percentageOfNeiboursToVisit = 0.33;//0 to 1
 	
 	
 	
@@ -197,9 +197,8 @@ public class PlayerSkeleton {
 			}*/
 			System.out.println("current completed "+currentRowClearedSum+" rows.");
 			
-			
 			writer.println("current completed "+currentRowClearedSum+" rows.");
-			p.printWeights();
+			//p.printWeights();
 			
 			for(int i = 0; i < numberOfWeights; i++) {
 				writer.println("w" + i +": " + formatterNum.format(weights[i]));
@@ -254,7 +253,7 @@ public class PlayerSkeleton {
 						}
 					}
 					rowsCleared += s.getRowsCleared();
-					//neighbours[j] += s.getRowsCleared();// find all neighbours of current
+					// find all neighbours of current
 				}
 				
 				if(rowsCleared >= currentRowClearedSum) {
@@ -318,6 +317,8 @@ public class PlayerSkeleton {
 				//there is a better neighbour
 				//set current to this neighbour, and continue the loop
 				System.out.println(bestNeighbour +" is better ");
+				p.printWeights();
+				
 				writer.println(bestNeighbour +" is better ");
 				
 				p.updateWeights(bestNeighbour);
@@ -340,6 +341,7 @@ public class PlayerSkeleton {
 		for(int i = 0; i < numberOfWeights; i++) {
 			writer.println("w" + i + " = " + formatterNum.format(weightsLearnt[index][i]));
 		}
+		
 		
 		
 		System.out.println("All completed.");
