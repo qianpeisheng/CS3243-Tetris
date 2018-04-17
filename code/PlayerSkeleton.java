@@ -1,4 +1,8 @@
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -67,8 +71,22 @@ public class PlayerSkeleton {
 				weights[i] = weights[i] ;
 			} else if(isUpdate[i] == 1){
 				weights[i] = weights[i] - learning_rate;
+				
+				if (weights[i] < 0 && i == 2) {
+					// weights for number of rows cleared must be positive
+					//if it goes to -ve, give it a random +ve value between 0 and 1
+					Random rand = new Random();
+					weights[i] = rand.nextDouble();
+				}
 			} else {
 				weights[i] = weights[i] + learning_rate;
+				
+				if (weights[i] > 0 && i != 2) {
+					// weights except the one for number of rows cleared must be negative
+					//if it goes to +ve, give it a random negative value between -1 and 0
+					Random rand = new Random();
+					weights[i] = (-1) * rand.nextDouble();
+				}
 			}
 		}
 
@@ -91,7 +109,7 @@ public class PlayerSkeleton {
 	
 	public void printWeights() {
 		for(int i = 0; i < numberOfWeights; i ++) {
-			System.out.println(new DecimalFormat("##.####").format(weights[i]));
+			System.out.println(new DecimalFormat("##.#####").format(weights[i]));
 		}
 	}
 
@@ -101,6 +119,12 @@ public class PlayerSkeleton {
 		//new TFrame(s);
 		PlayerSkeleton p = new PlayerSkeleton();
 		p.currentNodeValue = 0;
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter("Log" + LocalDateTime.now() + ".txt", "UTF-8");
+			writer.println("training log starts\n");
+
+
 
 		boolean localMaximumReached = false;
 		
@@ -132,10 +156,12 @@ public class PlayerSkeleton {
 			}*/
 			currentRowClearedSum = PlayerSkeleton.currentNodeValue;
 			System.out.println("current completed "+currentRowClearedSum+" rows.");
+			writer.println("current completed "+currentRowClearedSum+" rows.");
 			//System.out.println("current score "+ new DecimalFormat("##.##").format(currentScore));
 			p.printWeights();
-
-
+			for(int i = 0; i < numberOfWeights; i++) {
+				writer.println("w" + i +": " + weights[i]);
+			}
 			
 			int[] neighbours = new int[(int) Math.pow(3,numberOfWeights)];
 			double[] neighboursScore = new double[(int) Math.pow(3,numberOfWeights)];
@@ -192,19 +218,22 @@ public class PlayerSkeleton {
 
 			
 			for(int k = 0; k < neighbours.length; k++) {
+				//if a neighbour is equally good 
+				
 				if(neighbours[k] >= currentBestValue) {
 					bestNeighbour = k;
 					currentBestValue = neighbours[k];
-					//System.out.println("k value " + k);
 
 				}
 			}
 			PlayerSkeleton.currentNodeValue = currentBestValue;
 			if (bestNeighbour == -1) {
 				System.out.println("The current node is better than all neighbours");
+				writer.println("The current node is better than all neighbours");
 				if(learning_rate > terminate_learning_rate) {
 					learning_rate = learning_rate*learning_rate_multiplier;
 					System.out.println("learning rate decreases to " + learning_rate);
+					writer.println("learning rate decreases to " + learning_rate);
 
 				} else {
 					localMaximumReached = true;
@@ -216,6 +245,7 @@ public class PlayerSkeleton {
 				//set current to this neighbour, and continue the loop
 				//System.out.println("neighbour "+ bestNeighbour + " scores "+new DecimalFormat("##.##").format(neighboursScore[bestNeighbour]));
 				System.out.println(bestNeighbour +" is better ");
+				writer.println(bestNeighbour +" is better ");
 				p.updateWeights(bestNeighbour);
 				p.updateLastweights();// new one is better than last, so replace it
 
@@ -223,6 +253,16 @@ public class PlayerSkeleton {
 			}
 		}
 		System.out.println("All completed.");
+		writer.println("\nLog ends.\n");
+		writer.close();
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
+		
 	
 }

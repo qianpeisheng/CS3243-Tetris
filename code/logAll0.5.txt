@@ -1,0 +1,168 @@
+current completed 0 rows.
+-0.5
+-0.5
+0.5
+-0.5
+-0.5
+-0.5
+-0.5
+neighbour 1886 scores 0
+1886 is better 
+current completed 124 rows.
+-0.5
+-0.51
+0.51
+-0.5
+-0.49
+-0.51
+-0.49
+neighbour 369 scores 0
+369 is better 
+current completed 126 rows.
+-0.5
+-0.51
+0.52
+-0.51
+-0.5
+-0.52
+-0.49
+neighbour 2038 scores 0
+2038 is better 
+current completed 131 rows.
+-0.5
+-0.52
+0.51
+-0.51
+-0.51
+-0.51
+-0.48
+neighbour 1721 scores 0
+1721 is better 
+current completed 132 rows.
+-0.5
+-0.52
+0.52
+-0.51
+-0.51
+-0.52
+-0.47
+The current node is better than all neighbours
+learning rate decreases to 0.005
+current completed 132 rows.
+-0.5
+-0.52
+0.52
+-0.51
+-0.51
+-0.52
+-0.47
+neighbour 232 scores 0
+232 is better 
+current completed 136 rows.
+-0.5
+-0.515
+0.515
+-0.505
+-0.505
+-0.52
+-0.47
+neighbour 984 scores 0
+984 is better 
+current completed 138 rows.
+-0.5
+-0.52
+0.51
+-0.505
+-0.505
+-0.525
+-0.475
+The current node is better than all neighbours
+learning rate decreases to 0.0025
+current completed 138 rows.
+-0.5
+-0.52
+0.51
+-0.505
+-0.505
+-0.525
+-0.475
+The current node is better than all neighbours
+learning rate decreases to 0.00125
+current completed 138 rows.
+-0.5
+-0.52
+0.51
+-0.505
+-0.505
+-0.525
+-0.475
+The current node is better than all neighbours
+learning rate decreases to 6.25E-4
+current completed 138 rows.
+-0.5
+-0.52
+0.51
+-0.505
+-0.505
+-0.525
+-0.475
+The current node is better than all neighbours
+learning rate decreases to 3.125E-4
+current completed 138 rows.
+-0.5
+-0.52
+0.51
+-0.505
+-0.505
+-0.525
+-0.475
+The current node is better than all neighbours
+learning rate decreases to 1.5625E-4
+current completed 138 rows.
+-0.5
+-0.52
+0.51
+-0.505
+-0.505
+-0.525
+-0.475
+neighbour 895 scores 0
+895 is better 
+current completed 138 rows.
+-0.5
+-0.5202
+0.51
+-0.505
+-0.5048
+-0.525
+-0.4752
+The current node is better than all neighbours
+learning rate decreases to 7.8125E-5
+current completed 138 rows.
+-0.5
+-0.5202
+0.51
+-0.505
+-0.5048
+-0.525
+-0.4752
+The current node is better than all neighbours
+learning rate decreases to 3.90625E-5
+current completed 138 rows.
+-0.5
+-0.5202
+0.51
+-0.505
+-0.5048
+-0.525
+-0.4752
+neighbour 1993 scores 0
+1993 is better 
+current completed 143 rows.
+-0.5
+-0.5202
+0.51
+-0.505
+-0.5048
+-0.525
+-0.4751
