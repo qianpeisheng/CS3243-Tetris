@@ -7,23 +7,29 @@ public class PlayerSkeleton {
 	
 	public static int numberOfWeights = 7;
 	public static double[] weights = {-0.5, -0.5, 0.5,-0.5,-0.5, -0.5,-0.5};// = new float[numberOfWeights];
+
 	public static double[] lastWeights = {-0.5, -0.5, 0.5,-0.5,-0.5, -0.5,-0.5};// = new float[numberOfWeights];
+
+	//public static double[] weights = {-0.1242, -0.0307, 0.298,-0.4959,-1, -0.3232,-0.3178};// = new float[numberOfWeights];
+	//public static double[] lastWeights = {-0.1242, -0.0307, 0.298,-0.4959,-1, -0.3232,-0.3178};// = new float[numberOfWeights];
 
 	//public static double[] weights = {-0.12, -0.03, 0.03,-0.5,-1, -0.3,-0.3};// = new float[numberOfWeights];
 	//public static double[] lastWeights = {-0.12, -0.03, 0.03,-0.5,-1, -0.3,-0.3};// = new float[numberOfWeights];
 
 	public static int currentRowClearedSum = 0;
 	public static double currentScore = 0;
-	public static int round = 20;
+	public static int round = 100;
 	public static int sleepTime = 0;
 
 	//int[] features = {colDiffSum, topHeight, numberOfRowsCleared, hasLost, numberOfHoles,meanHeightDiff,sumOfPitDepth};
 
 	public static double learning_rate = 0.01;
-	public static double learning_rate_multiplier = 0.8;
+	public static double learning_rate_multiplier = 0.5;
 	public static double terminate_learning_rate = 0.00001;
 	public static int currentRowsCleared = 0;
 	public static int lastRowsCleared = 0;
+	
+	public static int currentNodeValue;
 
 	//implement this function to have a working system
 	public int pickMove(State s, int[][] legalMoves) {
@@ -50,13 +56,16 @@ public class PlayerSkeleton {
 	public void updateWeights(int indexOfNeighbour) {
 		int[] isUpdate = new int[numberOfWeights];
 		for(int i = 0; i <numberOfWeights; i++ ) {
-			isUpdate[i] = indexOfNeighbour % 2;
-			indexOfNeighbour = indexOfNeighbour / 2;
+			isUpdate[i] = indexOfNeighbour % 3;
+			indexOfNeighbour = indexOfNeighbour / 3;
 		}
 		
-		for(int i = 0; i < numberOfWeights; i++) {
+		//at least 1 weight must change, so start from 1
+		for(int i = 1; i < numberOfWeights; i++) {
 			if(isUpdate[i] == 0) {
 				//make a negative change 
+				weights[i] = weights[i] ;
+			} else if(isUpdate[i] == 1){
 				weights[i] = weights[i] - learning_rate;
 			} else {
 				weights[i] = weights[i] + learning_rate;
@@ -82,7 +91,7 @@ public class PlayerSkeleton {
 	
 	public void printWeights() {
 		for(int i = 0; i < numberOfWeights; i ++) {
-			System.out.println(weights[i]);
+			System.out.println(new DecimalFormat("##.####").format(weights[i]));
 		}
 	}
 
@@ -91,12 +100,13 @@ public class PlayerSkeleton {
 		State s = new State();
 		//new TFrame(s);
 		PlayerSkeleton p = new PlayerSkeleton();
+		p.currentNodeValue = 0;
 
 		boolean localMaximumReached = false;
 		
 		//do until local maximum is found
 		while(!localMaximumReached && (learning_rate > terminate_learning_rate)) {
-			
+			/*
 			//reset it to zero
 			currentRowClearedSum = 0;
 			currentScore = 0;
@@ -119,14 +129,16 @@ public class PlayerSkeleton {
 				currentRowClearedSum += s.getRowsCleared();
 				Searcher calculator = new Searcher();
 				currentScore += calculator.calculateHeuristics(s);
-			}
+			}*/
+			currentRowClearedSum = PlayerSkeleton.currentNodeValue;
 			System.out.println("current completed "+currentRowClearedSum+" rows.");
-			System.out.println("current score "+ new DecimalFormat("##.##").format(currentScore));
+			//System.out.println("current score "+ new DecimalFormat("##.##").format(currentScore));
+			p.printWeights();
 
 
 			
-			int[] neighbours = new int[(int) Math.pow(2,numberOfWeights)];
-			double[] neighboursScore = new double[(int) Math.pow(2,numberOfWeights)];
+			int[] neighbours = new int[(int) Math.pow(3,numberOfWeights)];
+			double[] neighboursScore = new double[(int) Math.pow(3,numberOfWeights)];
 			
 			//initialize neighbours
 			for(int i = 0; i < neighbours.length; i++) {
@@ -136,9 +148,10 @@ public class PlayerSkeleton {
 			
 
 			//for every neighbour
-			//there are 2^numberOfWeights number of neighbours
-			//i.e. every weights can increase or decrease
-			for(int j = 0; j < Math.pow(2, numberOfWeights); j++) {
+			//there are 3^numberOfWeights number of neighbours
+			//i.e. every weights can increase or decrease, or dont change
+			//except that all weights do not change
+			for(int j = 0; j < Math.pow(3, numberOfWeights); j++) {
 				
 				//restore weights to the current weights
 				//then perturb one or more of them as a neighbour	
@@ -163,10 +176,9 @@ public class PlayerSkeleton {
 						}
 					}
 					neighbours[j] += s.getRowsCleared();// find all neighbours of current
-					Searcher calculator = new Searcher();
-					neighboursScore[j] += calculator.calculateHeuristics(s);
+					//Searcher calculator = new Searcher();
+					//neighboursScore[j] += calculator.calculateHeuristics(s);
 				}
-				//System.out.println("neighbour "+ j + " completes "+neighbours[j]+" rows.");
 			}
 			
 			p.getLastweights();//set back to the current node, for now
@@ -175,18 +187,19 @@ public class PlayerSkeleton {
 			// all neighbours are computed; find the maximum
 			
 			int bestNeighbour = -1;
-			double currentBestValue = currentScore;
+			int currentBestValue = currentRowClearedSum;
 			//System.out.println("current node "+ currentRowClearedSum+" --- ");
 
 			
 			for(int k = 0; k < neighbours.length; k++) {
-				if(neighboursScore[k] >= currentBestValue) {
+				if(neighbours[k] >= currentBestValue) {
 					bestNeighbour = k;
-					currentBestValue = neighboursScore[k];
+					currentBestValue = neighbours[k];
 					//System.out.println("k value " + k);
 
 				}
 			}
+			PlayerSkeleton.currentNodeValue = currentBestValue;
 			if (bestNeighbour == -1) {
 				System.out.println("The current node is better than all neighbours");
 				if(learning_rate > terminate_learning_rate) {
@@ -205,6 +218,7 @@ public class PlayerSkeleton {
 				System.out.println(bestNeighbour +" is better ");
 				p.updateWeights(bestNeighbour);
 				p.updateLastweights();// new one is better than last, so replace it
+
 				
 			}
 		}

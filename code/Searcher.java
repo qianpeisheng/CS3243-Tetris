@@ -40,7 +40,6 @@ public class Searcher {
 		int  n = rand.nextInt(list.size());
 		index = list.get(n);
 		
-		//System.out.println("search complete, index " + index);
 		return index;//return the index of legalMoves with lowest heuristics
 	}
 	
@@ -170,9 +169,6 @@ public class Searcher {
 				}
 			}
 		}
-		//int[] numberOfHolesArray = new int[1];
-		//numberOfHolesArray[0] = numberOfHoles;
-	//	System.out.println(" Holes " + numberOfHoles);
 
 		return numberOfHoles;
 	}
@@ -254,7 +250,7 @@ public class Searcher {
 	}
 	
 	/**
-	 * get the difference of the 
+	 * get the average difference of the col height to the mean height 
 	 * @param s
 	 * @return
 	 */
