@@ -47,19 +47,22 @@ public class PlayerSkeleton {
 	 * %2 = 0 -> +ve; %2 = 1 -> -ve
 	 * @param s
 	 */
-	public void updateWeights(int index) {
-		boolean positive;
-		if(index%2 == 0) {
-			positive = true;
-		} else {
-			positive = false;
+	public void updateWeights(int indexOfNeighbour) {
+		int[] isUpdate = new int[numberOfWeights];
+		for(int i = 0; i <numberOfWeights; i++ ) {
+			isUpdate[i] = indexOfNeighbour % 2;
+			indexOfNeighbour = indexOfNeighbour / 2;
 		}
-		if (positive) {
-			weights[index/2] = weights[index/2] + learning_rate;
-		} else {
-			weights[index/2] = weights[index/2] - learning_rate;
+		
+		for(int i = 0; i < numberOfWeights; i++) {
+			if(isUpdate[i] == 0) {
+				//make a negative change 
+				weights[i] = weights[i] - learning_rate;
+			} else {
+				weights[i] = weights[i] + learning_rate;
+			}
 		}
-  
+
 	}
 	
 	/**
@@ -74,6 +77,12 @@ public class PlayerSkeleton {
 	public void updateLastweights() {
 		for(int i = 0; i < weights.length; i++) {
 			lastWeights[i] = weights[i];
+		}
+	}
+	
+	public void printWeights() {
+		for(int i = 0; i < numberOfWeights; i ++) {
+			System.out.println(weights[i]);
 		}
 	}
 
@@ -116,8 +125,8 @@ public class PlayerSkeleton {
 
 
 			
-			int[] neighbours = new int[2*numberOfWeights];
-			double[] neighboursScore = new double[2*numberOfWeights];
+			int[] neighbours = new int[(int) Math.pow(2,numberOfWeights)];
+			double[] neighboursScore = new double[(int) Math.pow(2,numberOfWeights)];
 			
 			//initialize neighbours
 			for(int i = 0; i < neighbours.length; i++) {
@@ -127,9 +136,12 @@ public class PlayerSkeleton {
 			
 
 			//for every neighbour
-			for(int j = 0; j < 2*numberOfWeights; j++) {
+			//there are 2^numberOfWeights number of neighbours
+			//i.e. every weights can increase or decrease
+			for(int j = 0; j < Math.pow(2, numberOfWeights); j++) {
+				
 				//restore weights to the current weights
-				//then perturb one of them as a neighbour	
+				//then perturb one or more of them as a neighbour	
 				p.getLastweights();
 				p.updateWeights(j);
 				//repeat a few times to and sum the result
@@ -179,7 +191,7 @@ public class PlayerSkeleton {
 				System.out.println("The current node is better than all neighbours");
 				if(learning_rate > terminate_learning_rate) {
 					learning_rate = learning_rate*learning_rate_multiplier;
-					System.out.println("learning rate decreases to" + learning_rate);
+					System.out.println("learning rate decreases to " + learning_rate);
 
 				} else {
 					localMaximumReached = true;

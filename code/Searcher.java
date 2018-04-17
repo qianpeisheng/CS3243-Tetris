@@ -22,14 +22,10 @@ public class Searcher {
 		double[] heuristicsArray = new double[searchSpace];
 		for (int i = 0; i < searchSpace; i++) {
 			double heuristic = pickMoveExp(s, i);
-			heuristic += getClearedLines(s);
 			heuristicsArray[i] = heuristic;
-			//System.out.println(" heuristic " + heuristic);
 			if(best < heuristic) {
 				best = heuristic;
-				//index = i;
-				//System.out.println(" best " + heuristic);
-				//System.out.println(" index " + index);
+
 			} 
 		}
 		List<Integer> list = new ArrayList<Integer>();
@@ -48,6 +44,12 @@ public class Searcher {
 		return index;//return the index of legalMoves with lowest heuristics
 	}
 	
+	/**
+	 * Calculate heuristic after picking this move
+	 * @param s
+	 * @param i
+	 * @return the new heuristics value
+	 */
 	public double pickMoveExp(State s, int i) {
 		State sCopy = new State();
 		sCopy.lost = s.lost;
@@ -64,8 +66,6 @@ public class Searcher {
 	}
 	
 	public int getClearedLines(State s) {
-		//System.out.println(" clear " + s.getRowsCleared());
-
 		return s.getRowsCleared();
 	}
 	
@@ -277,14 +277,15 @@ public class Searcher {
 	 * @return
 	 */
 	public int getAllPitDepth(State s) {
-		int [] colDiff = getColDifferences(s);
-		int sum = 0;
-		for(int i = 0; i < colDiff.length; i++) {
-			if (colDiff[i] > 1) {
-				sum += colDiff[i];
+		int pitDepths = 0;
+		int[] heights =  getColHeights(s);
+		for(int i = 1; i < numOfCols - 1; i ++) {
+			if(heights[i-1] - 2 >= heights[i] && heights[i+1] - 2 >= heights[i]) {
+				int lowerSide = Math.min(heights[i-1], heights[i+1]);
+				pitDepths += (lowerSide - heights[i]);
 			}
 		}
-		return sum;
+		return pitDepths;
 	}
 	
 
