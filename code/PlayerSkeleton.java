@@ -35,9 +35,9 @@ public class PlayerSkeleton {
 	
 	public static int simulationRound = 20;
 	public static int maximumRandomStarts = 100;
-	public static double learning_rate = 0.01;
-	public static double learning_rate_multiplier = 0.1;
-	public static double terminate_learning_rate = 0.0001;
+	public static double learning_rate = 0.05;
+	public static double learning_rate_multiplier = 0.2;
+	public static double terminate_learning_rate = 0.002;
 	public static double percentageOfNeiboursToVisit = 0.33;//0 to 1
 	
 	
@@ -46,6 +46,7 @@ public class PlayerSkeleton {
 	public static int lastRowsCleared = 0;
 	
 	public static int maximumNeighbours = 2187;//3^7
+	public static int[] update = new int[numberOfWeights];
 	public static int sleepTime = 0;
 
 	//implement this function to have a working system
@@ -63,27 +64,43 @@ public class PlayerSkeleton {
 		}
 	}
 	
+	public int[] intToArray(int indexOfNeighbour) {
+		int[] updateInfo = new int[numberOfWeights];
+		for(int i = 0; i <numberOfWeights; i++ ) {
+			updateInfo[i] = indexOfNeighbour % 3;
+			indexOfNeighbour = indexOfNeighbour / 3;
+			update[i] = updateInfo[i];
+		}
+		return updateInfo;
+	}
+	
+	public boolean checkNextNew(int [] nextArray) {
+		boolean isNew = false;
+		for(int i = 0; i < numberOfWeights; i++ ) {
+			if(nextArray[i] == update[i] && update[i] != 0) {
+				isNew = true;
+			}
+			break;
+		}
+		return isNew;
+	}
 	
 	/**
 	 * Hill climbing search
-	 * div 2 -> index 
-	 * %2 = 0 -> +ve; %2 = 1 -> -ve
+	 * div 3 -> index 
+	 * 0 no change, 1 -ve 2 +ve
 	 * @param s
 	 */
-	public void updateWeights(int indexOfNeighbour) {
-		int[] isUpdate = new int[numberOfWeights];
-		for(int i = 0; i <numberOfWeights; i++ ) {
-			isUpdate[i] = indexOfNeighbour % 3;
-			indexOfNeighbour = indexOfNeighbour / 3;
-		}
+	public void updateWeights(int[] updateInfo) {
+
 		Random rand = new Random();
 		
 		//at least 1 weight must change, so start from 1
 		for(int i = 0; i < numberOfWeights; i++) {
-			if(isUpdate[i] == 0) {
+			if(updateInfo[i] == 0) {
 				//does not change
 				weights[i] = weights[i] ;
-			} else if(isUpdate[i] == 1){
+			} else if(updateInfo[i] == 1){
 				//make a -ve move
 				weights[i] = weights[i] - learning_rate;
 				
@@ -231,7 +248,15 @@ public class PlayerSkeleton {
 				//restore weights to the current weights
 				//then perturb one or more of them as a neighbour	
 				p.getLastweights();
-				p.updateWeights(mylist.get(neighbourIndex));
+				int nextNeighbourIndex = mylist.get(neighbourIndex);
+				int[] nextArray = p.intToArray(nextNeighbourIndex);
+				boolean isNextNew = p.checkNextNew(nextArray);
+				if(!isNextNew) {
+					//next is now new, no need to check it
+					continue;
+				}
+				p.updateWeights(nextArray);
+				
 				
 				rowsCleared = 0;
 				//repeat a few times to and sum the result
@@ -321,7 +346,9 @@ public class PlayerSkeleton {
 				
 				writer.println(bestNeighbour +" is better ");
 				
-				p.updateWeights(bestNeighbour);
+				int[] nextArray = p.intToArray(bestNeighbour);
+				
+				p.updateWeights(nextArray);
 				p.updateLastweights();// new one is better than last, so replace it
 
 				
