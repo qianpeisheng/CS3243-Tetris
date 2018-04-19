@@ -8,8 +8,8 @@ import java.util.stream.IntStream;
 
 public class Searcher {
 	
-	public static int numberOfWeights = 5;
-	public static int numberOfFeatures = 5;
+	public static int numberOfWeights = 4;
+	public static int numberOfFeatures = 4;
 	public static int numOfCols = 10;
 	public static int numOfRows = 20;
 	
@@ -37,7 +37,8 @@ public class Searcher {
 			}
 		}
 		
-		Random rand = new Random();// randomly choose the index if they all have the same heuristics value
+		Random rand = new Random();
+		// randomly choose the index if they all have the same heuristics value
 
 		int  n = rand.nextInt(list.size());
 		index = list.get(n);
@@ -61,14 +62,8 @@ public class Searcher {
 		sCopy.top = s.getTopClone();
 		sCopy.nextPiece = s.getNextPiece();
 		sCopy.makeMove(i);
-		//for(int i0 = 0; i0 < 4; i0++) {
-		//	for(int j = 0; j < numOfCols; j++) {
-		//		System.out.println("value at " + i0 + " " + j +" is " + sCopy.field[i0][j]);
-				
-		//	}
-		//}
+
 		double h = calculateHeuristics(sCopy);
-		//System.out.println("Moves " + i);
 		return h;
 				
 	}
@@ -83,9 +78,8 @@ public class Searcher {
 		int colDiffSum = colDiffSum(s);
 		int numberOfRowsCleared = getClearedLines(s);
 		int numberOfHoles = getNumberOfHoles(s);
-		int hasLost = getHasLost(s);
 
-		double[] features = getAllFeatures(aggregateHeights, numberOfRowsCleared, numberOfHoles,colDiffSum,hasLost);
+		double[] features = getAllFeatures(aggregateHeights, numberOfRowsCleared, numberOfHoles,colDiffSum);
 		
 		double heurisitics = MultiplyFeaturesToWeights(features, weights);
 		
@@ -135,8 +129,8 @@ public class Searcher {
      * @param topHeight
      * @return an array of length 21 of all features as int
      */
-	public double[] getAllFeatures (int aggregateHeights, int colDiffSum, int numberOfRowsCleared, int numberOfHoles, int hasLost) {
-		double[] features = {aggregateHeights, colDiffSum, numberOfRowsCleared, numberOfHoles, hasLost};
+	public double[] getAllFeatures (int aggregateHeights, int colDiffSum, int numberOfRowsCleared, int numberOfHoles) {
+		double[] features = {aggregateHeights, colDiffSum, numberOfRowsCleared, numberOfHoles};
 		return features;
 	}
 	
@@ -148,21 +142,11 @@ public class Searcher {
 	 * @return
 	 */
 	public int getNumberOfHoles(State s) {
-		int[] colHeights = getColHeights(s);
 		int maxColHeight = getTopHeight(s);
-		//System.out.println("maxColHeight " + maxColHeight);
 		int numberOfHoles = 0;
 		//A hole is defined as an empty space such that there is at least one tile in the same column above it.
-		//System.out.println("get number of holes ");
 
-		for(int i0 = 0; i0 < 4; i0++) {
-			for(int j = 0; j < 10; j++) {
-				//System.out.println("value at " + i0 + " " + j +" is " + s.field[i0][j]);
-				
-			}
-		}
 		for(int i = 0; i < maxColHeight; i++) {
-			//System.out.println("i = " + i);
 
 			// for every row
 			// need to access at least row i + 1
@@ -171,29 +155,24 @@ public class Searcher {
 				if(s.getField()[i][j] == 0) {
 					//it is empty
 					//need to know if any block above is occupied
-					//System.out.println("empty at " + i + " " + j);
 					boolean isHole = false;
-					//k <= colHeights[j] + 1
 					int tempHole = -1;
 					for (int k = i; k <= numOfRows; k++ ) {
 						//the highest covering block is the one at row colHeights[j] - 1
 						//height at the 0th row is 1
 						// it is in the same column j
-						//System.out.println("value at " + k + " " + j + " is " + s.getField()[k][j]);
 
 						if(s.getField()[k][j] == 0) {
 							tempHole ++;
 						}
 						if(s.getField()[k][j] != 0) {
 							isHole = true;
-							k = 99999;
-							//break;
+							k = 99999;// leave the loop
 						}
 					}
 					if(isHole) {
 						//it is covered somewhere above
 						numberOfHoles += 1;
-						numberOfHoles += tempHole;
 					}
 				}
 			}
@@ -222,13 +201,16 @@ public class Searcher {
 		return colHeights;
 	}
 	 
-	
+	/**
+	 * Get the sum of heights of all columns
+	 * @param s the state
+	 * @return the sum
+	 */
 	public int getAggregateHeights(State s) {
 		int sum = 0;
 		for(int i = 0; i < numOfCols; i++) {
 			sum += s.getTop()[i];
 		}
-		//int sum = IntStream.of(colHeights).sum();
 		return sum;
 	}
 	
@@ -245,8 +227,6 @@ public class Searcher {
 			}
 		}
 		
-		//int[] maxArray = new int[1];
-		//maxArray[0] = max;
 		return max;
 
 	}
@@ -309,8 +289,7 @@ public class Searcher {
 		for(int i = 0; i < heights.length; i++) {
 			average += Math.abs(heights[i] - averageHeight);
 		}
-		//average = average/heights.length;
-		//to scale the result
+
 		return average;
 		
 	}
