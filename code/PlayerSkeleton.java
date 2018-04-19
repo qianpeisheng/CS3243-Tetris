@@ -5,6 +5,8 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.stream.IntStream;
 
@@ -26,6 +28,7 @@ public class PlayerSkeleton {
 	public static int[] fitness = new int[numOfParents];
 	public static int fitnessForOne = 0;
 	public static int[] randomParentsIndex = new int[numOfRandomParents];
+	public static ArrayList<Integer> randomSequence = new ArrayList<Integer>(); 
 	public static double[] offSpring = new double[numberOfWeights];
 	public static int[] bestParents = new int[2];//use 2 parents to produce offspring
 	public static int numberOfRowsCleared = 0;
@@ -68,6 +71,15 @@ public class PlayerSkeleton {
 		}
 		System.out.println("Initialization completed.");
 
+	}
+	
+	/**
+	 * Build a sequence of 0, 1, ... numOfParents to get unique random numbers
+	 */
+	public void initializeRandomSequence() {
+		for(int i = 0; i < numOfParents; i ++) {
+			randomSequence.add(new Integer(i));
+		}
 	}
 	
 	/**
@@ -114,9 +126,10 @@ public class PlayerSkeleton {
 	 * Randomly select parents before selecting the best parents to produce offsprings
 	 */
 	public void selectParentsRandom() {
-		Random rand = new Random();
+
+        Collections.shuffle(randomSequence);
 		for(int i = 0; i < numOfRandomParents; i ++) {
-			randomParentsIndex[i] = rand.nextInt(numOfParents);
+			randomParentsIndex[i] = randomSequence.get(i);
 		}
 	}
 	
@@ -255,7 +268,7 @@ public class PlayerSkeleton {
 	 * @return the weights
 	 */
 	public double[] showBest() {
-		NumberFormat formatterNum = new DecimalFormat("#0.0000");  
+		NumberFormat formatterNum = new DecimalFormat("#0.000000");  
 		int bestIndex = getBestParentIndex();
 		double[] bestWeight = weightsSet[bestIndex];
 		numberOfRowsCleared = fitness[bestIndex];
@@ -273,6 +286,7 @@ public class PlayerSkeleton {
 		//initialize weights and fitness values
 		p.initializeWeightsSet();
 		p.calculateFitnessAllParents();
+		p.initializeRandomSequence();
 		
 		try {
 			
@@ -304,7 +318,23 @@ public class PlayerSkeleton {
 				writer.println("Number of rows cleared: "+ numberOfRowsCleared);
 				writer.println("--------------------");
 				if(numberOfRowsCleared > goal) {
+				    for (int j = 0; j < numOfParents ; j++) {
+				    	for(int k = 0; k < numberOfWeights; k ++) {
+					    	writer.println(weightsSet[j][k]);
+				    	}
+				    }
 					break;
+				}
+				
+				//save weights in the last generation
+				if(i == 30 || i == 60 || i == 90 || i == 120 || i == 150 || i == 180 || i == numberOfGenarations - 1) {
+					System.out.println("save weights.");
+
+				    for (int j = 0; j < numOfParents ; j++) {
+				    	for(int k = 0; k < numberOfWeights; k ++) {
+					    	writer.println(weightsSet[j][k]);
+				    	}
+				    }
 				}
 
 			}
