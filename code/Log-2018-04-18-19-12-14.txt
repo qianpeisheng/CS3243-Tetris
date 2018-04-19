@@ -1,0 +1,753 @@
+round: 10
+training log starts
+
+current completed 0 rows.
+w0: -0.2832
+w1: 0.3220
+w2: -0.9899
+w3: -0.2138
+58 is better 
+current completed 1350 rows.
+w0: -0.3332
+w1: 0.2720
+w2: -0.9899
+w3: -0.1638
+28 is better 
+current completed 1645 rows.
+w0: -0.3832
+w1: 0.2720
+w2: -0.9899
+w3: -0.2138
+2 is better 
+current completed 2403 rows.
+w0: -0.3332
+w1: 0.2720
+w2: -0.9899
+w3: -0.2138
+38 is better 
+current completed 3094 rows.
+w0: -0.2832
+w1: 0.2720
+w2: -1.0399
+w3: -0.2638
+4 is better 
+current completed 3956 rows.
+w0: -0.3332
+w1: 0.2220
+w2: -1.0399
+w3: -0.2638
+28 is better 
+current completed 4590 rows.
+w0: -0.3832
+w1: 0.2220
+w2: -1.0399
+w3: -0.3138
+64 is better 
+current completed 5224 rows.
+w0: -0.4332
+w1: 0.2220
+w2: -1.0899
+w3: -0.2638
+The current node is better than all neighbours
+learning rate decreases to 0.005000000000000001
+current completed 5224 rows.
+w0: -0.4332
+w1: 0.2220
+w2: -1.0899
+w3: -0.2638
+The current node is better than all neighbours
+learning rate decreases to 5.000000000000001E-4
+current completed 5224 rows.
+w0: -0.4332
+w1: 0.2220
+w2: -1.0899
+w3: -0.2638
+The current node is better than all neighbours
+-----------------------
+round 0 rows cleared: 5224
+-0.4332
+0.2220
+-1.0899
+-0.2638
+-----------------------
+random restart round 1
+current completed 0 rows.
+w0: -0.9001
+w1: 0.2800
+w2: -0.9022
+w3: -0.5374
+52 is better 
+current completed 1598 rows.
+w0: -0.9501
+w1: 0.3300
+w2: -0.8522
+w3: -0.5874
+58 is better 
+current completed 1716 rows.
+w0: -1.0001
+w1: 0.2800
+w2: -0.8522
+w3: -0.5374
+70 is better 
+current completed 3029 rows.
+w0: -1.0501
+w1: 0.3300
+w2: -0.9022
+w3: -0.4874
+4 is better 
+current completed 4341 rows.
+w0: -1.1001
+w1: 0.2800
+w2: -0.9022
+w3: -0.4874
+The current node is better than all neighbours
+learning rate decreases to 0.005000000000000001
+current completed 4341 rows.
+w0: -1.1001
+w1: 0.2800
+w2: -0.9022
+w3: -0.4874
+61 is better 
+current completed 5680 rows.
+w0: -1.1051
+w1: 0.2850
+w2: -0.9022
+w3: -0.4824
+The current node is better than all neighbours
+learning rate decreases to 5.000000000000001E-4
+current completed 5680 rows.
+w0: -1.1051
+w1: 0.2850
+w2: -0.9022
+w3: -0.4824
+The current node is better than all neighbours
+-----------------------
+round 1 rows cleared: 5680
+-1.1051
+0.2850
+-0.9022
+-0.4824
+-----------------------
+random restart round 2
+current completed 0 rows.
+w0: -0.8595
+w1: 0.1354
+w2: -0.6373
+w3: -0.2370
+23 is better 
+current completed 4309 rows.
+w0: -0.8095
+w1: 0.0854
+w2: -0.5873
+w3: -0.2370
+11 is better 
+current completed 4601 rows.
+w0: -0.7595
+w1: 0.0854
+w2: -0.6373
+w3: -0.2370
+29 is better 
+current completed 4739 rows.
+w0: -0.7095
+w1: 0.0854
+w2: -0.6373
+w3: -0.2870
+2 is better 
+current completed 4860 rows.
+w0: -0.6595
+w1: 0.0854
+w2: -0.6373
+w3: -0.2870
+5 is better 
+current completed 5182 rows.
+w0: -0.6095
+w1: 0.0354
+w2: -0.6373
+w3: -0.2870
+The current node is better than all neighbours
+learning rate decreases to 0.005000000000000001
+current completed 5182 rows.
+w0: -0.6095
+w1: 0.0354
+w2: -0.6373
+w3: -0.2870
+38 is better 
+current completed 5213 rows.
+w0: -0.6045
+w1: 0.0354
+w2: -0.6423
+w3: -0.2920
+The current node is better than all neighbours
+learning rate decreases to 5.000000000000001E-4
+current completed 5213 rows.
+w0: -0.6045
+w1: 0.0354
+w2: -0.6423
+w3: -0.2920
+The current node is better than all neighbours
+-----------------------
+round 2 rows cleared: 5213
+-0.6045
+0.0354
+-0.6423
+-0.2920
+-----------------------
+random restart round 3
+current completed 0 rows.
+w0: -0.3095
+w1: 0.3018
+w2: -0.1994
+w3: -0.9249
+1 is better 
+current completed 131 rows.
+w0: -0.3595
+w1: 0.3018
+w2: -0.1994
+w3: -0.9249
+10 is better 
+current completed 194 rows.
+w0: -0.4095
+w1: 0.3018
+w2: -0.2494
+w3: -0.9249
+46 is better 
+current completed 197 rows.
+w0: -0.4595
+w1: 0.3018
+w2: -0.1994
+w3: -0.9749
+The current node is better than all neighbours
+learning rate decreases to 0.005000000000000001
+current completed 197 rows.
+w0: -0.4595
+w1: 0.3018
+w2: -0.1994
+w3: -0.9749
+67 is better 
+current completed 211 rows.
+w0: -0.4645
+w1: 0.2968
+w2: -0.2044
+w3: -0.9699
+64 is better 
+current completed 219 rows.
+w0: -0.4695
+w1: 0.2968
+w2: -0.2094
+w3: -0.9649
+The current node is better than all neighbours
+learning rate decreases to 5.000000000000001E-4
+current completed 219 rows.
+w0: -0.4695
+w1: 0.2968
+w2: -0.2094
+w3: -0.9649
+52 is better 
+current completed 224 rows.
+w0: -0.4700
+w1: 0.2973
+w2: -0.2089
+w3: -0.9654
+17 is better 
+current completed 244 rows.
+w0: -0.4695
+w1: 0.2978
+w2: -0.2094
+w3: -0.9654
+The current node is better than all neighbours
+-----------------------
+round 3 rows cleared: 244
+-0.4695
+0.2978
+-0.2094
+-0.9654
+-----------------------
+random restart round 4
+current completed 0 rows.
+w0: -0.6892
+w1: 0.9209
+w2: -0.9240
+w3: -0.3805
+65 is better 
+current completed 2564 rows.
+w0: -0.6392
+w1: 0.9209
+w2: -0.9740
+w3: -0.3305
+41 is better 
+current completed 2871 rows.
+w0: -0.5892
+w1: 0.8709
+w2: -1.0240
+w3: -0.3805
+25 is better 
+current completed 3151 rows.
+w0: -0.6392
+w1: 0.9209
+w2: -0.9740
+w3: -0.3805
+65 is better 
+current completed 3327 rows.
+w0: -0.5892
+w1: 0.9209
+w2: -1.0240
+w3: -0.3305
+35 is better 
+current completed 3479 rows.
+w0: -0.5392
+w1: 0.9709
+w2: -1.0240
+w3: -0.3805
+70 is better 
+current completed 4026 rows.
+w0: -0.5892
+w1: 1.0209
+w2: -1.0740
+w3: -0.3305
+77 is better 
+current completed 4296 rows.
+w0: -0.5392
+w1: 0.9709
+w2: -1.0240
+w3: -0.2805
+38 is better 
+current completed 4578 rows.
+w0: -0.4892
+w1: 0.9709
+w2: -1.0740
+w3: -0.3305
+55 is better 
+current completed 5125 rows.
+w0: -0.5392
+w1: 0.9709
+w2: -1.0740
+w3: -0.2805
+28 is better 
+current completed 6021 rows.
+w0: -0.5892
+w1: 0.9709
+w2: -1.0740
+w3: -0.3305
+The current node is better than all neighbours
+learning rate decreases to 0.005000000000000001
+current completed 6021 rows.
+w0: -0.5892
+w1: 0.9709
+w2: -1.0740
+w3: -0.3305
+The current node is better than all neighbours
+learning rate decreases to 5.000000000000001E-4
+current completed 6021 rows.
+w0: -0.5892
+w1: 0.9709
+w2: -1.0740
+w3: -0.3305
+The current node is better than all neighbours
+-----------------------
+round 4 rows cleared: 6021
+-0.5892
+0.9709
+-1.0740
+-0.3305
+-----------------------
+random restart round 5
+current completed 0 rows.
+w0: -0.7679
+w1: 0.0658
+w2: -0.7228
+w3: -0.8541
+53 is better 
+current completed 345 rows.
+w0: -0.7179
+w1: 0.1158
+w2: -0.6728
+w3: -0.9041
+70 is better 
+current completed 400 rows.
+w0: -0.7679
+w1: 0.1658
+w2: -0.7228
+w3: -0.8541
+77 is better 
+current completed 405 rows.
+w0: -0.7179
+w1: 0.1158
+w2: -0.6728
+w3: -0.8041
+16 is better 
+current completed 405 rows.
+w0: -0.7679
+w1: 0.1658
+w2: -0.7228
+w3: -0.8041
+2 is better 
+current completed 482 rows.
+w0: -0.7179
+w1: 0.1658
+w2: -0.7228
+w3: -0.8041
+70 is better 
+current completed 991 rows.
+w0: -0.7679
+w1: 0.2158
+w2: -0.7728
+w3: -0.7541
+7 is better 
+current completed 1430 rows.
+w0: -0.8179
+w1: 0.2658
+w2: -0.7728
+w3: -0.7541
+The current node is better than all neighbours
+learning rate decreases to 0.005000000000000001
+current completed 1430 rows.
+w0: -0.8179
+w1: 0.2658
+w2: -0.7728
+w3: -0.7541
+49 is better 
+current completed 1713 rows.
+w0: -0.8229
+w1: 0.2608
+w2: -0.7678
+w3: -0.7591
+The current node is better than all neighbours
+learning rate decreases to 5.000000000000001E-4
+current completed 1713 rows.
+w0: -0.8229
+w1: 0.2608
+w2: -0.7678
+w3: -0.7591
+The current node is better than all neighbours
+-----------------------
+round 5 rows cleared: 1713
+-0.8229
+0.2608
+-0.7678
+-0.7591
+-----------------------
+random restart round 6
+current completed 0 rows.
+w0: -0.2340
+w1: 0.9646
+w2: -0.1748
+w3: -0.8209
+38 is better 
+current completed 85 rows.
+w0: -0.1840
+w1: 0.9646
+w2: -0.2248
+w3: -0.8709
+79 is better 
+current completed 95 rows.
+w0: -0.2340
+w1: 1.0146
+w2: -0.1748
+w3: -0.8209
+16 is better 
+current completed 128 rows.
+w0: -0.2840
+w1: 1.0646
+w2: -0.2248
+w3: -0.8209
+58 is better 
+current completed 175 rows.
+w0: -0.3340
+w1: 1.0146
+w2: -0.2248
+w3: -0.7709
+1 is better 
+current completed 191 rows.
+w0: -0.3840
+w1: 1.0146
+w2: -0.2248
+w3: -0.7709
+32 is better 
+current completed 195 rows.
+w0: -0.3340
+w1: 0.9646
+w2: -0.2248
+w3: -0.8209
+4 is better 
+current completed 214 rows.
+w0: -0.3840
+w1: 0.9146
+w2: -0.2248
+w3: -0.8209
+52 is better 
+current completed 223 rows.
+w0: -0.4340
+w1: 0.9646
+w2: -0.1748
+w3: -0.8709
+The current node is better than all neighbours
+learning rate decreases to 0.005000000000000001
+current completed 223 rows.
+w0: -0.4340
+w1: 0.9646
+w2: -0.1748
+w3: -0.8709
+The current node is better than all neighbours
+learning rate decreases to 5.000000000000001E-4
+current completed 223 rows.
+w0: -0.4340
+w1: 0.9646
+w2: -0.1748
+w3: -0.8709
+The current node is better than all neighbours
+-----------------------
+round 6 rows cleared: 223
+-0.4340
+0.9646
+-0.1748
+-0.8709
+-----------------------
+random restart round 7
+current completed 0 rows.
+w0: -0.5139
+w1: 0.9291
+w2: -0.4923
+w3: -0.0975
+65 is better 
+current completed 1042 rows.
+w0: -0.4639
+w1: 0.9291
+w2: -0.5423
+w3: -0.0475
+44 is better 
+current completed 1087 rows.
+w0: -0.4139
+w1: 0.9791
+w2: -0.5923
+w3: -0.0975
+37 is better 
+current completed 2158 rows.
+w0: -0.4639
+w1: 0.9791
+w2: -0.6423
+w3: -0.1475
+28 is better 
+current completed 2306 rows.
+w0: -0.5139
+w1: 0.9791
+w2: -0.6423
+w3: -0.1975
+41 is better 
+current completed 3198 rows.
+w0: -0.4639
+w1: 0.9291
+w2: -0.6923
+w3: -0.2475
+73 is better 
+current completed 3679 rows.
+w0: -0.5139
+w1: 0.9291
+w2: -0.6423
+w3: -0.1975
+53 is better 
+current completed 4357 rows.
+w0: -0.4639
+w1: 0.9791
+w2: -0.5923
+w3: -0.2475
+64 is better 
+current completed 4419 rows.
+w0: -0.5139
+w1: 0.9791
+w2: -0.6423
+w3: -0.1975
+49 is better 
+current completed 5373 rows.
+w0: -0.5639
+w1: 0.9291
+w2: -0.5923
+w3: -0.2475
+The current node is better than all neighbours
+learning rate decreases to 0.005000000000000001
+current completed 5373 rows.
+w0: -0.5639
+w1: 0.9291
+w2: -0.5923
+w3: -0.2475
+The current node is better than all neighbours
+learning rate decreases to 5.000000000000001E-4
+current completed 5373 rows.
+w0: -0.5639
+w1: 0.9291
+w2: -0.5923
+w3: -0.2475
+The current node is better than all neighbours
+-----------------------
+round 7 rows cleared: 5373
+-0.5639
+0.9291
+-0.5923
+-0.2475
+-----------------------
+random restart round 8
+current completed 0 rows.
+w0: -0.5813
+w1: 0.4975
+w2: -0.3542
+w3: -0.0478
+23 is better 
+current completed 1671 rows.
+w0: -0.5313
+w1: 0.4475
+w2: -0.3042
+w3: -0.0478
+43 is better 
+current completed 1882 rows.
+w0: -0.5813
+w1: 0.4975
+w2: -0.3542
+w3: -0.0978
+38 is better 
+current completed 2721 rows.
+w0: -0.5313
+w1: 0.4975
+w2: -0.4042
+w3: -0.1478
+22 is better 
+current completed 3203 rows.
+w0: -0.5813
+w1: 0.4475
+w2: -0.3542
+w3: -0.1478
+53 is better 
+current completed 3231 rows.
+w0: -0.5313
+w1: 0.4975
+w2: -0.3042
+w3: -0.1978
+13 is better 
+current completed 4155 rows.
+w0: -0.5813
+w1: 0.4475
+w2: -0.3542
+w3: -0.1978
+8 is better 
+current completed 4155 rows.
+w0: -0.5313
+w1: 0.4975
+w2: -0.3542
+w3: -0.1978
+77 is better 
+current completed 4897 rows.
+w0: -0.4813
+w1: 0.4475
+w2: -0.3042
+w3: -0.1478
+13 is better 
+current completed 6294 rows.
+w0: -0.5313
+w1: 0.3975
+w2: -0.3542
+w3: -0.1478
+The current node is better than all neighbours
+learning rate decreases to 0.005000000000000001
+current completed 6294 rows.
+w0: -0.5313
+w1: 0.3975
+w2: -0.3542
+w3: -0.1478
+76 is better 
+current completed 6349 rows.
+w0: -0.5363
+w1: 0.3925
+w2: -0.3492
+w3: -0.1428
+The current node is better than all neighbours
+learning rate decreases to 5.000000000000001E-4
+current completed 6349 rows.
+w0: -0.5363
+w1: 0.3925
+w2: -0.3492
+w3: -0.1428
+The current node is better than all neighbours
+-----------------------
+round 8 rows cleared: 6349
+-0.5363
+0.3925
+-0.3492
+-0.1428
+-----------------------
+random restart round 9
+current completed 0 rows.
+w0: -0.1462
+w1: 0.6138
+w2: -0.9736
+w3: -0.0943
+32 is better 
+current completed 1945 rows.
+w0: -0.0962
+w1: 0.5638
+w2: -0.9736
+w3: -0.1443
+26 is better 
+current completed 3111 rows.
+w0: -0.0462
+w1: 0.6138
+w2: -0.9236
+w3: -0.1443
+38 is better 
+current completed 4972 rows.
+w0: -0.1626
+w1: 0.6138
+w2: -0.9736
+w3: -0.1943
+47 is better 
+current completed 5811 rows.
+w0: -0.1126
+w1: 0.6138
+w2: -0.9236
+w3: -0.2443
+The current node is better than all neighbours
+learning rate decreases to 0.005000000000000001
+current completed 5811 rows.
+w0: -0.1126
+w1: 0.6138
+w2: -0.9236
+w3: -0.2443
+71 is better 
+current completed 5845 rows.
+w0: -0.1076
+w1: 0.6188
+w2: -0.9286
+w3: -0.2393
+The current node is better than all neighbours
+learning rate decreases to 5.000000000000001E-4
+current completed 5845 rows.
+w0: -0.1076
+w1: 0.6188
+w2: -0.9286
+w3: -0.2393
+70 is better 
+current completed 5868 rows.
+w0: -0.1081
+w1: 0.6193
+w2: -0.9291
+w3: -0.2388
+29 is better 
+current completed 6699 rows.
+w0: -0.1076
+w1: 0.6193
+w2: -0.9291
+w3: -0.2393
+The current node is better than all neighbours
+-----------------------
+round 9 rows cleared: 6699
+-0.1076
+0.6193
+-0.9291
+-0.2393
+-----------------------
+random restart round 10
+Best result: rows cleared in 10 rounds is 6699
+w0 = -0.1076
+w1 = 0.6193
+w2 = -0.9291
+w3 = -0.2393
+
+Log ends.
+

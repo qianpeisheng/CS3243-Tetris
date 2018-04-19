@@ -17,37 +17,37 @@ import java.util.stream.IntStream;
 
 public class PlayerSkeleton {
 	
-	public static int numberOfWeights = 7;
-	//int[] features = {colDiffSum, topHeight, numberOfRowsCleared, hasLost, numberOfHoles,meanHeightDiff,sumOfPitDepth};
+	public static int numberOfWeights = 5;
 
-	public static double[] weights = {-0.4, -0.4, 0.4,-0.4,-0.4, -0.4,-0.4};// = new float[numberOfWeights];
+	public static double[] weights = {-0.510066,0.760666,-0.35663,-0.184483, -1};
 
-	public static double[] lastWeights = {-0.4, -0.4, 0.4,-0.4,-0.4, -0.4,-0.4};// = new float[numberOfWeights];
+	public static double[] lastWeights = {-0.510066,0.760666,-0.35663,-0.184483, -1};// = new float[numberOfWeights];
+	//double[] features = getAllFeatures(hasLost, aggregateHeights, numberOfRowsCleared, numberOfHoles,colDiffSum);
 
-	//public static double[] weights = {-0.1242, -0.0307, 0.298,-0.4959,-1, -0.3232,-0.3178};// = new float[numberOfWeights];
-	//public static double[] lastWeights = {-0.1242, -0.0307, 0.298,-0.4959,-1, -0.3232,-0.3178};// = new float[numberOfWeights];
-
-	//public static double[] weights = {-0.12, -0.03, 0.03,-0.5,-1, -0.3,-0.3};// = new float[numberOfWeights];
-	//public static double[] lastWeights = {-0.12, -0.03, 0.03,-0.5,-1, -0.3,-0.3};// = new float[numberOfWeights];
+	public static double[] weightsRestore = {-0.510066,0.760666,-0.35663,-0.184483, -1};
 
 	public static int currentRowClearedSum = 0;
 	public static double currentScore = 0;
+	public static int rowsCleared = 0;
 	
-	public static int simulationRound = 20;
-	public static int maximumRandomStarts = 100;
+	public static int simulationRound = 10;
+	public static int maximumRandomStarts = 10;
+	public static double learning_rate_restore = 0.05;
+
 	public static double learning_rate = 0.05;
-	public static double learning_rate_multiplier = 0.2;
-	public static double terminate_learning_rate = 0.002;
-	public static double percentageOfNeiboursToVisit = 0.33;//0 to 1
+	public static double learning_rate_multiplier = 0.1;
+	public static double terminate_learning_rate = 0.006;
+	public static double percentageOfNeiboursToVisit = 1;//0 to 1
 	
 	
 	
 	public static int currentRowsCleared = 0;
 	public static int lastRowsCleared = 0;
 	
-	public static int maximumNeighbours = 2187;//3^7
+	public static int maximumNeighbours = 81;//3^4 do not learn hasLost
 	public static int[] update = new int[numberOfWeights];
 	public static int sleepTime = 0;
+	public static State s = new State();
 
 	//implement this function to have a working system
 	public int pickMove(State s, int[][] legalMoves) {
@@ -66,7 +66,7 @@ public class PlayerSkeleton {
 	
 	public int[] intToArray(int indexOfNeighbour) {
 		int[] updateInfo = new int[numberOfWeights];
-		for(int i = 0; i <numberOfWeights; i++ ) {
+		for(int i = 0; i <numberOfWeights -1; i++ ) {
 			updateInfo[i] = indexOfNeighbour % 3;
 			indexOfNeighbour = indexOfNeighbour / 3;
 			update[i] = updateInfo[i];
@@ -76,7 +76,7 @@ public class PlayerSkeleton {
 	
 	public boolean checkNextNew(int [] nextArray) {
 		boolean isNew = false;
-		for(int i = 0; i < numberOfWeights; i++ ) {
+		for(int i = 0; i < numberOfWeights -1; i++) {
 			if(nextArray[i] == update[i] && update[i] != 0) {
 				isNew = true;
 			}
@@ -96,7 +96,7 @@ public class PlayerSkeleton {
 		Random rand = new Random();
 		
 		//at least 1 weight must change, so start from 1
-		for(int i = 0; i < numberOfWeights; i++) {
+		for(int i = 0; i < numberOfWeights -1; i++) {
 			if(updateInfo[i] == 0) {
 				//does not change
 				weights[i] = weights[i] ;
@@ -104,21 +104,23 @@ public class PlayerSkeleton {
 				//make a -ve move
 				weights[i] = weights[i] - learning_rate;
 				
-				if (weights[i] < 0 && i == 2) {
+				if (weights[i] < 0 && i == 1) {
 					// weights for number of rows cleared must be positive
 					//if it goes to -ve, give it a random +ve value between 0 and 1
 
 					weights[i] = rand.nextDouble();
+					System.out.println("random restart " + i);
 				}
 			} else {
 				//make a +ve move	
 				weights[i] = weights[i] + learning_rate;
 				
-				if (weights[i] > 0 && i != 2) {
+				if (weights[i] > 0 && i != 1) {
 					// weights except the one for number of rows cleared must be negative
 					//if it goes to +ve, give it a random negative value between -1 and 0
 
 					weights[i] = (-1) * rand.nextDouble();
+					System.out.println("random restart " + i);
 				}
 			}
 		}
@@ -151,9 +153,10 @@ public class PlayerSkeleton {
 	 * This is for random restart in hill climbing
 	 */
 	public void randomRestart() {
-		for (int i = 0; i < numberOfWeights; i++) {
-			Random rand = new Random();
-			if(i != 2) {
+		Random rand = new Random();
+		for (int i = 0; i < numberOfWeights -1; i++) {
+
+			if(i != 1) {
 				weights[i] = (-1) * rand.nextDouble();
 			} else {
 				weights[i] = rand.nextDouble();
@@ -161,6 +164,14 @@ public class PlayerSkeleton {
 
 		}
 		updateLastweights();
+	}
+	
+	public void restoreWeights() {
+		for(int i = 0; i < numberOfWeights; i++ ) {
+			weights[i] = weightsRestore[i];
+			lastWeights[i] = weightsRestore[i];
+
+		}
 	}
 
 		
@@ -170,7 +181,7 @@ public class PlayerSkeleton {
 		
 		int[] maximumRowsCleared = new int[maximumRandomStarts];
 		double[][] weightsLearnt = new double[maximumRandomStarts][numberOfWeights];
-		State s = new State();
+		//State s = new State();
 		//new TFrame(s);
 		PlayerSkeleton p = new PlayerSkeleton();
 		
@@ -186,6 +197,8 @@ public class PlayerSkeleton {
 			//writer.close();
 		
 		int randomStartCount = 0;
+		p.randomRestart();
+		//p.restoreWeights();
 		//do until local maximum is found
 		while(randomStartCount < maximumRandomStarts) {
 			/*
@@ -193,28 +206,35 @@ public class PlayerSkeleton {
 			currentRowClearedSum = 0;
 			currentScore = 0;
 			
-			for(int i = 0; i < round; i++) {
+			for(int i = 0; i < 10; i++) {
 				s = new State();
-				//new TFrame(s);
+				new TFrame(s);
 				while(!s.hasLost()) {
 
 					s.makeMove(p.pickMove(s, s.legalMoves()));
-					//s.draw();
-					//s.drawNext(0,0);
+					s.draw();
+					s.drawNext(0,0);
 
 					try {
-						Thread.sleep(sleepTime);
+						Thread.sleep(10);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
+
+
+
 				}
 				currentRowClearedSum += s.getRowsCleared();
-				Searcher calculator = new Searcher();
-				currentScore += calculator.calculateHeuristics(s);
+				System.out.println("current completed "+currentRowClearedSum+" rows.");
+				currentRowClearedSum = 0;
+
+			//	Searcher calculator = new Searcher();
+			//	currentScore += calculator.calculateHeuristics(s);
 			}*/
+			
 			System.out.println("current completed "+currentRowClearedSum+" rows.");
 			
-			writer.println("current completed "+currentRowClearedSum+" rows.");
+			//writer.println("current completed "+currentRowClearedSum+" rows.");
 			//p.printWeights();
 			
 			for(int i = 0; i < numberOfWeights; i++) {
@@ -232,7 +252,7 @@ public class PlayerSkeleton {
 			
 			boolean isFound = false;
 			int neighbourIndex = 0;
-			int rowsCleared = 0;
+			rowsCleared = 0;
 			//0 means no change. There must be some change			
 			ArrayList<Integer>  mylist = new ArrayList<Integer>();
 			for (int i = 0; i < maximumNeighbours; i ++) {
@@ -257,8 +277,29 @@ public class PlayerSkeleton {
 				}
 				p.updateWeights(nextArray);
 				
-				
+
 				rowsCleared = 0;
+				IntStream.range(0,simulationRound).parallel().forEach(i->{
+					State s = new State();
+					//play until end to see how good the new weights are
+					s = new State();
+					//new TFrame(s);
+					while(!s.hasLost()) {
+
+						s.makeMove(p.pickMove(s, s.legalMoves()));
+						//s.draw();
+						//s.drawNext(0,0);
+
+						//try {
+							//Thread.sleep(sleepTime);
+						//} catch (InterruptedException e) {
+						//	e.printStackTrace();
+						//}
+					}
+					rowsCleared += s.getRowsCleared();
+					// find all neighbours of current
+			 });
+				/*
 				//repeat a few times to and sum the result
 				for(int i = 0; i < simulationRound; i++) {
 	
@@ -279,7 +320,7 @@ public class PlayerSkeleton {
 					}
 					rowsCleared += s.getRowsCleared();
 					// find all neighbours of current
-				}
+				}*/
 				
 				if(rowsCleared >= currentRowClearedSum) {
 					isFound = true;
@@ -329,7 +370,9 @@ public class PlayerSkeleton {
 					
 					randomStartCount ++;
 					p.randomRestart();
-					learning_rate = 0.01;//reset learning rate
+					//p.restoreWeights();
+
+					learning_rate = learning_rate_restore;//reset learning rate
 					currentRowClearedSum = 0;
 					System.out.println("random restart round " + randomStartCount);
 					writer.println("random restart round " + randomStartCount);
