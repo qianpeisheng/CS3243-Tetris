@@ -174,7 +174,7 @@ public class Searcher {
 					//System.out.println("empty at " + i + " " + j);
 					boolean isHole = false;
 					//k <= colHeights[j] + 1
-					int tempHole = 0;
+					int tempHole = -1;
 					for (int k = i; k <= numOfRows; k++ ) {
 						//the highest covering block is the one at row colHeights[j] - 1
 						//height at the 0th row is 1
