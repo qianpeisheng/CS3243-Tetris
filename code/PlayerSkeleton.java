@@ -6,6 +6,7 @@ import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 import java.util.stream.IntStream;
@@ -22,14 +23,20 @@ public class PlayerSkeleton {
 	public static int numberOfGenarations = 100;
 	public static double mutateRate = 0.05;
 	public static double mutateRange = 0.2;
-	public static double weight0 = -0.5;
+	//public static double weight0 = -0.5;
 	
-	public static double[][] weightsSet = new double[numOfParents][numberOfWeights];
-	public static int[] fitness = new int[numOfParents];
+	//public static double[] weights = {-0.510066,0.760666,-0.35663,-0.184483};
+	//the last element of the set is Fitness of this parent
+	public static int indexOfFitness = 4;
+	public static int cutOffFitness = -1;
+	public static double[][] weightsSetWithF = new double[numOfParents][numberOfWeights + 1];
 	public static int fitnessForOne = 0;
 	public static int[] randomParentsIndex = new int[numOfRandomParents];
 	public static ArrayList<Integer> randomSequence = new ArrayList<Integer>(); 
 	public static double[] offSpring = new double[numberOfWeights];
+	public static double[][] offSpringSet = new double[numberOfReplacement][numberOfWeights + 1];
+	// the last element is fitness
+	public static int offSpringFitness = -1;
 	public static int[] bestParents = new int[2];//use 2 parents to produce offspring
 	public static int numberOfRowsCleared = 0;
 	public static int goal = 10000000;// stop if 10 rounds of games clear 10 million lines
@@ -61,16 +68,37 @@ public class PlayerSkeleton {
 		for(int j = 0; j < numOfParents; j++) {
 			for (int i = 0; i < numberOfWeights; i++) {
 				if(i != 1) {
-					weightsSet[j][i] = (-1) * rand.nextDouble();
+					weightsSetWithF[j][i] = (-1) * rand.nextDouble();
 					//System.out.println(weightsSet[j][i]);
 				} else {
-					weightsSet[j][i] = rand.nextDouble();
+					weightsSetWithF[j][i] = rand.nextDouble();
 					//System.out.println(weightsSet[j][i]);
 				}
+			}
+			double[] weightsNormalized = normalize(weightsSetWithF[j]);
+			for(int i = 0; i < numberOfWeights; i++) {
+				weightsSetWithF[j][i] = weightsNormalized[i];
 			}
 		}
 		System.out.println("Initialization completed.");
 
+	}
+	
+	/*
+	 * normalize the weight vector so that |w| = 1
+	 */
+	public double[] normalize(double weights[]) {
+		double[] weightsNormalized = new double[numberOfWeights];
+		double length = 0;
+		for(int i = 0; i < numberOfWeights; i++) {
+			length += Math.pow(weights[i], 2);
+		}
+		length = Math.sqrt(length);
+		
+		for(int i = 0; i < numberOfWeights; i ++) {
+			weightsNormalized[i] = weights[i]/length;
+		}
+		return weightsNormalized;
 	}
 	
 	/**
@@ -90,7 +118,10 @@ public class PlayerSkeleton {
 	 * In this case, 10 games
 	 */
 	public int calculateFitnessForOneParent(int parentIndex) {
-		double[] parentWeights = weightsSet[parentIndex];
+		double[] parentWeights = new double [numberOfWeights];
+		for(int i = 0; i < numberOfWeights; i++) {
+			parentWeights[i] = weightsSetWithF[parentIndex][i];
+		}
 		fitnessForOne = 0;
 		IntStream.range(0,simulationRound).parallel().forEach(i->{
 		//for(int i = 0; i < simulationRound; i++) {
@@ -107,10 +138,36 @@ public class PlayerSkeleton {
 		//}
 		 });
 		
-		//System.out.println("fitness for " + parentIndex + " is " + fitnessForOne);
+		System.out.println("fitness for " + parentIndex + " is " + fitnessForOne);
 
 		
 		return fitnessForOne;
+	}
+	
+	/**
+	 * Similar to the method above
+	 */
+	public void calculateFitnessForOneOffSpring() {
+		fitnessForOne = 0;
+		IntStream.range(0,simulationRound).parallel().forEach(i->{
+		//for(int i = 0; i < simulationRound; i++) {
+			State s = new State();
+			//play until end to see how good the new weights are
+			//s = new State();
+			//new TFrame(s);
+			while(!s.hasLost()) {
+				s.makeMove(pickMove(s, s.legalMoves(), offSpring));
+				//s.draw();
+				//s.drawNext(0,0);
+			}
+			fitnessForOne += s.getRowsCleared();
+		//}
+		 });
+		
+		System.out.println("fitness for offSpring is " + fitnessForOne);
+
+		
+		offSpringFitness = fitnessForOne;
 	}
 	
 	/**
@@ -118,8 +175,19 @@ public class PlayerSkeleton {
 	 */
 	public void calculateFitnessAllParents() {
 		for(int i = 0; i < numOfParents; i++) {
-			fitness[i] = calculateFitnessForOneParent(i);
+			weightsSetWithF[i][indexOfFitness] = calculateFitnessForOneParent(i);
+;
 		}
+	}
+	
+	/**
+	 * Sort the parents and get the cut off value, in this case the lowest 300
+	 */
+	public void sortParents() {
+		Arrays.sort(weightsSetWithF, (a, b) -> Double.compare(a[indexOfFitness], b[indexOfFitness]));
+		cutOffFitness = (int) weightsSetWithF[numberOfReplacement - 1][indexOfFitness];
+		System.out.println("cut off is " + cutOffFitness);
+
 	}
 	
 	/**
@@ -140,14 +208,14 @@ public class PlayerSkeleton {
 		double[] currentBest = {-9999, -9999};// initialize best to min values
 		int[] currentParentIndex = {-1, -1};
 		for(int i = 0; i < numOfRandomParents; i ++) {
-			if(fitness[randomParentsIndex[i]] > currentBest[0]) {
+			if(weightsSetWithF[randomParentsIndex[i]][indexOfFitness] > currentBest[0]) {
 				//this one is better than the best
 				currentParentIndex[0] = randomParentsIndex[i];
-				currentBest[0] = fitness[randomParentsIndex[i]];
-			} else if (fitness[randomParentsIndex[i]] > currentBest[1]) {
+				currentBest[0] = weightsSetWithF[randomParentsIndex[i]][indexOfFitness];
+			} else if (weightsSetWithF[randomParentsIndex[i]][indexOfFitness] > currentBest[1]) {
 				//this one is not better than the best, but better than the second best
 				currentParentIndex[1] = randomParentsIndex[i];
-				currentBest[1] = fitness[randomParentsIndex[i]];
+				currentBest[1] = weightsSetWithF[randomParentsIndex[i]][indexOfFitness];
 			}
 		}
 		bestParents[0] = currentParentIndex[0];
@@ -160,18 +228,22 @@ public class PlayerSkeleton {
 	 * Possibly mutate the offspring
 	 */
 	public void calculateOffSpring() {
-		double totalFitness = fitness[bestParents[0]] + fitness[bestParents[1]];
-		double fitnessParentOne = fitness[bestParents[0]];
-		double fitnessParentTwo = fitness[bestParents[1]];
+		double totalFitness = weightsSetWithF[bestParents[0]][indexOfFitness] + weightsSetWithF[bestParents[1]][indexOfFitness];
+		double fitnessParentOne = weightsSetWithF[bestParents[0]][indexOfFitness];
+		double fitnessParentTwo = weightsSetWithF[bestParents[1]][indexOfFitness];
 		double weightMultiplierOne = fitnessParentOne/totalFitness;
 		double weightMultiplierTwo = fitnessParentTwo/totalFitness;
 		//offSpring[0] = weight0;
 		for(int i = 0; i < numberOfWeights; i++) {
-			offSpring[i] = weightsSet[bestParents[0]][i] * weightMultiplierOne + weightsSet[bestParents[1]][i] * weightMultiplierTwo;
+			offSpring[i] = weightsSetWithF[bestParents[0]][i] * weightMultiplierOne + weightsSetWithF[bestParents[1]][i] * weightMultiplierTwo;
 			//System.out.println("offSpring "+ i + " is " + offSpring[i]);
 
 		}
 		mutate();
+		double[] weightsNormalized = normalize(offSpring);
+		for(int i = 0; i < numberOfWeights; i++) {
+			offSpring[i] = weightsNormalized[i];
+		}
 	}
 	
 	/**
@@ -208,9 +280,9 @@ public class PlayerSkeleton {
 		int index = -1;
 		int lowestFitness = 9999;//initialize lowest fitness to max
 		for(int i = 0; i < numOfParents; i++) {
-			if(fitness[i] < lowestFitness) {
+			if(weightsSetWithF[i][indexOfFitness] < lowestFitness) {
 				//a weaker one found
-				lowestFitness = fitness[i];
+				lowestFitness = (int) weightsSetWithF[i][indexOfFitness];
 				index = i;
 			}
 		}
@@ -225,9 +297,9 @@ public class PlayerSkeleton {
 		int index = -1;
 		int highestFitness = -9999;//initialize highest fitness to min
 		for(int i = 0; i < numOfParents; i++) {
-			if(fitness[i] > highestFitness) {
+			if(weightsSetWithF[i][indexOfFitness] > highestFitness) {
 				//a weaker one found
-				highestFitness = fitness[i];
+				highestFitness = (int) weightsSetWithF[i][indexOfFitness];
 				index = i;
 			}
 		}
@@ -238,11 +310,11 @@ public class PlayerSkeleton {
 	 * Replace the parent with the current offSpring
 	 * @param index
 	 */
-	public void replaceOneParent(int index) {
+	public void addOffSpringSet(int index) {
 		for(int i = 0; i < numberOfWeights; i ++) {
-			weightsSet[index][i] = offSpring[i];
+			offSpringSet[index][i] = offSpring[i];
 		}
-		fitness[index] = calculateFitnessForOneParent(index);
+		offSpringSet[index][indexOfFitness] = offSpringFitness;
 	}
 	
 	/**
@@ -251,16 +323,27 @@ public class PlayerSkeleton {
 	 * which comprises 30% of the population.
 	 */
 	public void produceNextgeneration() {
-		int weakestParentIndex = -1;
+		sortParents();
+		boolean isValid = false;// true if the offspring is better than the last 300 parents
 		for(int i = 0; i < numberOfReplacement; i++) {
-			weakestParentIndex = getWeakestParentIndex();
+			isValid = false;
 			//System.out.println("weakestParentIndex is " + weakestParentIndex);
-
-			selectParentsRandom();
-			getBestParents();
-			calculateOffSpring();
-			replaceOneParent(weakestParentIndex);
-		}	
+			while(!isValid) {
+				selectParentsRandom();
+				getBestParents();
+				calculateOffSpring();
+				calculateFitnessForOneOffSpring();
+				if(offSpringFitness > cutOffFitness ) {
+					isValid = true;
+				}
+			}
+			addOffSpringSet(i);
+		}
+		for(int i = 0; i < numberOfReplacement; i++) {
+			for(int j = 0; j < numberOfWeights + 1; j++) {
+				weightsSetWithF[i][j] = offSpringSet[i][j];
+			}
+		}
 	}
 	
 	/**
@@ -270,8 +353,8 @@ public class PlayerSkeleton {
 	public double[] showBest() {
 		NumberFormat formatterNum = new DecimalFormat("#0.000000");  
 		int bestIndex = getBestParentIndex();
-		double[] bestWeight = weightsSet[bestIndex];
-		numberOfRowsCleared = fitness[bestIndex];
+		double[] bestWeight = weightsSetWithF[bestIndex];
+		numberOfRowsCleared = (int) weightsSetWithF[bestIndex][indexOfFitness];
 		for(int i = 0; i < numberOfWeights; i++) {
 			System.out.println("W" + i + ": " + formatterNum.format(bestWeight[i]));
 		}
@@ -285,6 +368,8 @@ public class PlayerSkeleton {
 		
 		//initialize weights and fitness values
 		p.initializeWeightsSet();
+		//p.initializeWeightsSet2();
+
 		p.calculateFitnessAllParents();
 		p.initializeRandomSequence();
 		
@@ -320,7 +405,7 @@ public class PlayerSkeleton {
 				if(numberOfRowsCleared > goal) {
 				    for (int j = 0; j < numOfParents ; j++) {
 				    	for(int k = 0; k < numberOfWeights; k ++) {
-					    	writer.println(weightsSet[j][k]);
+					    	writer.println(weightsSetWithF[j][k]);
 				    	}
 				    }
 					break;
@@ -332,7 +417,7 @@ public class PlayerSkeleton {
 
 				    for (int j = 0; j < numOfParents ; j++) {
 				    	for(int k = 0; k < numberOfWeights; k ++) {
-					    	writer.println(weightsSet[j][k]);
+					    	writer.println(weightsSetWithF[j][k]);
 				    	}
 				    }
 				}
